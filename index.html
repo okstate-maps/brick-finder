@@ -61,26 +61,23 @@ var bricks = L.esri.Geocoding.featureLayerProvider({
   searchFields: ['PeopleNamed'], // Search these fields for text matches
   label: 'Bricks', // Group suggestions under this header
   formatSuggestion: function(feature){
-    return feature.properties.PeopleNamed + ' - ' + feature.properties.DateMentioned; // format suggestions like this.
+    return feature.properties.PeopleNamed; // format suggestions like this.
   }
 });
 
 var searchControl = L.esri.Geocoding.geosearch({
   providers: [bricks],// will geocode via ArcGIS Online and search the GIS Day feature service.
   zoomToResult: false,
-  expanded: true,
-  collapseAfterResult: false
+  expanded: false,
+  collapseAfterResult: true,
+  placeholder: "Search for a brick by name..."
 }).addTo(map);
-
-
-  //var searchControl = L.esri.Geocoding.geosearch().addTo(map);
 
   var results = L.layerGroup().addTo(map);
 
   searchControl.on('results', function(data){
     results.clearLayers();
     for (var i = data.results.length - 1; i >= 0; i--) {
-      debugger;
       var feature = data.results[i];
       var props = feature.properties;
       var popupContent = "<p>" + props["PeopleNamed"] + "</p>"+"<img class='thumb' src='"+ props["AttachmentUrl"] +"'/>";
